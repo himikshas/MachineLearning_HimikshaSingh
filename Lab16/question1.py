@@ -33,7 +33,7 @@ def split_dataset(X, y, test_size=0.2, random_state=42):
 def bootstrap_sample(X, y):
     n_samples = len(X)
     indices = np.random.choice(n_samples, n_samples, replace=True)
-    return X[indices], y[indices]
+    return X.iloc[indices], y.iloc[indices]
 
 
 """ Step 4: Train Ensemble of Trees """
