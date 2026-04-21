@@ -65,7 +65,6 @@ def assign_clusters(X, centroids):
 def update_centroids(X, labels, k):
     """
     Compute new centroids as mean of assigned points.
-
     Handles empty clusters by reinitializing randomly.
 
     Returns:

@@ -3,11 +3,13 @@
 # Import required libraries
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.svm import SVC
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, f1_score
 from ISLP import load_data
 
 # ---------------------------------------------------
@@ -22,6 +24,42 @@ def loadData():
 
     return df
 
+# ---------------------------------------------------
+# Function for EDA (Exploratory Data Analysis)
+# ---------------------------------------------------
+def perform_eda(df):
+    """
+    Performs basic EDA:
+    - Shape of dataset
+    - Data types
+    - Missing values
+    - Class distribution
+    - Summary statistics
+    """
+
+    print("\n--- EDA: Basic Information ---")
+
+    # Shape of dataset
+    print("\nShape of dataset:", df.shape)
+
+    # Data types
+    print("\nData types:\n", df.dtypes)
+
+    # Missing values
+    print("\nMissing values:\n", df.isnull().sum())
+
+    print("\nShape:", df.shape)
+    print("\nMissing values:\n", df.isnull().sum())
+    print("\nTarget distribution:\n", df['Purchase'].value_counts())
+
+    # Countplot
+    plt.figure()
+    sns.countplot(x='Purchase', data=df)
+    plt.title("Target Distribution")
+    plt.show()
+
+    # Summary statistics
+    print("\nSummary statistics:\n", df.describe(include='all'))
 
 # ---------------------------------------------------
 # Function for preprocessing
@@ -114,7 +152,10 @@ def train_linear_svm(X_train, X_test, y_train, y_test):
     train_acc = accuracy_score(y_train, y_train_pred)
     test_acc = accuracy_score(y_test, y_test_pred)
 
-    return train_acc, test_acc
+    train_f1 = f1_score(y_train, y_train_pred)
+    test_f1 = f1_score(y_test, y_test_pred)
+
+    return train_acc, test_acc, train_f1, test_f1
 
 
 # ---------------------------------------------------
@@ -140,15 +181,22 @@ def train_rbf_svm(X_train, X_test, y_train, y_test):
     train_acc = accuracy_score(y_train, y_train_pred)
     test_acc = accuracy_score(y_test, y_test_pred)
 
-    return train_acc, test_acc
+    train_f1 = f1_score(y_train, y_train_pred)
+    test_f1 = f1_score(y_test, y_test_pred)
+
+
+
+    return train_acc, test_acc, train_f1, test_f1
 
 
 # ---------------------------------------------------
 # Main function (runs everything)
 # ---------------------------------------------------
 def main():
-    # Step 1: Load dataset
+    # Step 1: Load dataset and eda
     df = loadData()
+
+    perform_eda(df)
 
     # Step 2: Preprocess data
     X, y = preprocess_data(df)
@@ -160,22 +208,26 @@ def main():
     X_train_scaled, X_test_scaled = scale_data(X_train, X_test)
 
     # Step 5: Train Linear SVM (Part b)
-    lin_train_acc, lin_test_acc = train_linear_svm(
+    lin_train_acc, lin_test_acc, lin_f1_train, lin_f1_test = train_linear_svm(
         X_train_scaled, X_test_scaled, y_train, y_test
     )
 
     print("\n--- Linear SVM (C = 0.01) ---")
     print("Train Accuracy:", lin_train_acc)
     print("Test Accuracy:", lin_test_acc)
+    print("\nTrain F1 score :", lin_f1_train)
+    print("Test F1 score:", lin_f1_test)
 
     # Step 6: Train RBF SVM (Part c)
-    rbf_train_acc, rbf_test_acc = train_rbf_svm(
+    rbf_train_acc, rbf_test_acc, rbf_f1_train, rbf_f1_test = train_rbf_svm(
         X_train_scaled, X_test_scaled, y_train, y_test
     )
 
     print("\n--- RBF Kernel SVM ---")
     print("Train Accuracy:", rbf_train_acc)
     print("Test Accuracy:", rbf_test_acc)
+    print("\nTrain F1 score:", rbf_f1_train)
+    print("Test F1 score:", rbf_f1_test)
 
     # Step 7: Compare models
     if rbf_test_acc > lin_test_acc:
