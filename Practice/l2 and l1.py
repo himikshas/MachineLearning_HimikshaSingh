@@ -2,8 +2,6 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 import pandas as pd
 
-
-
 """ Load dataset """
 def loadData():
     data = pd.read_csv('simulated_data_multiple_linear_regression_for_ML.csv')

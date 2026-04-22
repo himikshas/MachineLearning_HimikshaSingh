@@ -3,7 +3,7 @@
 """ Implement K-Means algorithm ground-up using Python """
 
 """
-K-Means Clustering from Scratch (Function-based)
+K-Means Clustering from Scratch 
 
 This script implements K-Means clustering using only NumPy.
 It includes:
@@ -65,7 +65,6 @@ def assign_clusters(X, centroids):
 def update_centroids(X, labels, k):
     """
     Compute new centroids as mean of assigned points.
-
     Handles empty clusters by reinitializing randomly.
 
     Returns:
@@ -132,7 +131,7 @@ if __name__ == "__main__":
     np.random.seed(0)
 
     """
-    Generate synthetic dataset with 3 clusters
+    Generate dataset with 3 clusters
     """
     X = np.vstack((
         np.random.randn(100, 2) + [2, 2],

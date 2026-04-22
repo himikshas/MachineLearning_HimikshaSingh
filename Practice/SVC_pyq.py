@@ -3,6 +3,8 @@
 # Import required libraries
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.preprocessing import StandardScaler, LabelEncoder
@@ -18,6 +20,42 @@ def loadData():
     df = load_data("OJ")
     return df
 
+# ---------------------------------------------------
+# Function for EDA (Exploratory Data Analysis)
+# ---------------------------------------------------
+def perform_eda(df):
+    """
+    Performs basic EDA:
+    - Shape of dataset
+    - Data types
+    - Missing values
+    - Class distribution
+    - Summary statistics
+    """
+
+    print("\n--- EDA: Basic Information ---")
+
+    # Shape of dataset
+    print("\nShape of dataset:", df.shape)
+
+    # Data types
+    print("\nData types:\n", df.dtypes)
+
+    # Missing values
+    print("\nMissing values:\n", df.isnull().sum())
+
+    print("\nShape:", df.shape)
+    print("\nMissing values:\n", df.isnull().sum())
+    print("\nTarget distribution:\n", df['Purchase'].value_counts())
+
+    # Countplot
+    plt.figure()
+    sns.countplot(x='Purchase', data=df)
+    plt.title("Target Distribution")
+    plt.show()
+
+    # Summary statistics
+    print("\nSummary statistics:\n", df.describe(include='all'))
 
 # ---------------------------------------------------
 # Function for preprocessing
@@ -89,6 +127,7 @@ def train_linear_svm(X_train_scaled, X_test_scaled, y_train, y_test):
     test_f1 = f1_score(y_test, y_test_pred)
 
     return train_acc, test_acc, train_f1, test_f1
+<<<<<<< HEAD
 
 
 # ---------------------------------------------------
@@ -144,6 +183,8 @@ def evaluate_model(model, X_train_scaled, X_test_scaled, y_train, y_test):
 
     #return values
     return train_acc, test_acc
+=======
+>>>>>>> 0e239208bbef8f863223c7a69b5edc32a6ab21e1
 
 
 # ---------------------------------------------------
@@ -164,6 +205,11 @@ def train_rbf_svm(X_train_scaled, X_test_scaled, y_train, y_test):
     train_f1 = f1_score(y_train, y_train_pred)
     test_f1 = f1_score(y_test, y_test_pred)
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 0e239208bbef8f863223c7a69b5edc32a6ab21e1
     return train_acc, test_acc, train_f1, test_f1
 
 
@@ -171,9 +217,19 @@ def train_rbf_svm(X_train_scaled, X_test_scaled, y_train, y_test):
 # Main
 # ---------------------------------------------------
 def main():
+<<<<<<< HEAD
 
     # Step 1: Load data
     data = loadData()
+=======
+    # Step 1: Load dataset and eda
+    df = loadData()
+
+    perform_eda(df)
+
+    # Step 2: Preprocess data
+    X, y = preprocess_data(df)
+>>>>>>> 0e239208bbef8f863223c7a69b5edc32a6ab21e1
 
     # Step 2: Preprocess
     X, y = preprocess_data(data)
@@ -184,14 +240,20 @@ def main():
     # Step 4: Scale
     X_train_scaled, X_test_scaled = scale_data(X_train, X_test)
 
+<<<<<<< HEAD
     # Step 5: Linear SVM (Part b)
     lin_train_acc, lin_test_acc, lin_train_f1, lin_test_f1 = train_linear_svm(
+=======
+    # Step 5: Train Linear SVM (Part b)
+    lin_train_acc, lin_test_acc, lin_f1_train, lin_f1_test = train_linear_svm(
+>>>>>>> 0e239208bbef8f863223c7a69b5edc32a6ab21e1
         X_train_scaled, X_test_scaled, y_train, y_test
     )
 
     print("\n--- Linear SVM (C = 0.01) ---")
     print("Train Accuracy:", lin_train_acc)
     print("Test Accuracy:", lin_test_acc)
+<<<<<<< HEAD
     print("Train F1 score:", lin_train_f1)
     print("Test F1 score:", lin_test_f1)
 
@@ -209,14 +271,26 @@ def main():
 
     # Step 8: RBF SVM (Part e)
     rbf_train_acc, rbf_test_acc, rbf_train_f1, rbf_test_f1 = train_rbf_svm(
+=======
+    print("\nTrain F1 score :", lin_f1_train)
+    print("Test F1 score:", lin_f1_test)
+
+    # Step 6: Train RBF SVM (Part c)
+    rbf_train_acc, rbf_test_acc, rbf_f1_train, rbf_f1_test = train_rbf_svm(
+>>>>>>> 0e239208bbef8f863223c7a69b5edc32a6ab21e1
         X_train_scaled, X_test_scaled, y_train, y_test
     )
 
     print("\n--- RBF Kernel SVM ---")
     print("Train Accuracy:", rbf_train_acc)
     print("Test Accuracy:", rbf_test_acc)
+<<<<<<< HEAD
     print("Train F1 score:", rbf_train_f1)
     print("Test F1 score:", rbf_test_f1)
+=======
+    print("\nTrain F1 score:", rbf_f1_train)
+    print("Test F1 score:", rbf_f1_test)
+>>>>>>> 0e239208bbef8f863223c7a69b5edc32a6ab21e1
 
     # Final comparison
     print("\n--- Final Conclusion ---")
