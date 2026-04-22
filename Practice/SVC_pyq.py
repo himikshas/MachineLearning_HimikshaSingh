@@ -127,7 +127,7 @@ def train_linear_svm(X_train_scaled, X_test_scaled, y_train, y_test):
     test_f1 = f1_score(y_test, y_test_pred)
 
     return train_acc, test_acc, train_f1, test_f1
-<<<<<<< HEAD
+
 
 
 # ---------------------------------------------------
@@ -183,8 +183,6 @@ def evaluate_model(model, X_train_scaled, X_test_scaled, y_train, y_test):
 
     #return values
     return train_acc, test_acc
-=======
->>>>>>> 0e239208bbef8f863223c7a69b5edc32a6ab21e1
 
 
 # ---------------------------------------------------
@@ -205,11 +203,7 @@ def train_rbf_svm(X_train_scaled, X_test_scaled, y_train, y_test):
     train_f1 = f1_score(y_train, y_train_pred)
     test_f1 = f1_score(y_test, y_test_pred)
 
-<<<<<<< HEAD
-=======
 
-
->>>>>>> 0e239208bbef8f863223c7a69b5edc32a6ab21e1
     return train_acc, test_acc, train_f1, test_f1
 
 
@@ -217,50 +211,35 @@ def train_rbf_svm(X_train_scaled, X_test_scaled, y_train, y_test):
 # Main
 # ---------------------------------------------------
 def main():
-<<<<<<< HEAD
 
-    # Step 1: Load data
-    data = loadData()
-=======
-    # Step 1: Load dataset and eda
+    # Step 1: Load data + EDA
     df = loadData()
-
     perform_eda(df)
 
-    # Step 2: Preprocess data
-    X, y = preprocess_data(df)
->>>>>>> 0e239208bbef8f863223c7a69b5edc32a6ab21e1
-
     # Step 2: Preprocess
-    X, y = preprocess_data(data)
+    X, y = preprocess_data(df)
 
-    # Step 3: Split (Part a)
+    # Step 3: Split
     X_train, X_test, y_train, y_test = split_data(X, y)
 
     # Step 4: Scale
     X_train_scaled, X_test_scaled = scale_data(X_train, X_test)
 
-<<<<<<< HEAD
-    # Step 5: Linear SVM (Part b)
+    # Step 5: Linear SVM
     lin_train_acc, lin_test_acc, lin_train_f1, lin_test_f1 = train_linear_svm(
-=======
-    # Step 5: Train Linear SVM (Part b)
-    lin_train_acc, lin_test_acc, lin_f1_train, lin_f1_test = train_linear_svm(
->>>>>>> 0e239208bbef8f863223c7a69b5edc32a6ab21e1
         X_train_scaled, X_test_scaled, y_train, y_test
     )
 
     print("\n--- Linear SVM (C = 0.01) ---")
     print("Train Accuracy:", lin_train_acc)
     print("Test Accuracy:", lin_test_acc)
-<<<<<<< HEAD
     print("Train F1 score:", lin_train_f1)
     print("Test F1 score:", lin_test_f1)
 
-    # Step 6: Grid Search (Part c)
+    # Step 6: Grid Search
     best_model = grid_search_svm(X_train_scaled, y_train)
 
-    # Step 7: Evaluate Best Model (Part d)
+    # Step 7: Evaluate best model
     best_train_acc, best_test_acc = evaluate_model(
         best_model,
         X_train_scaled,
@@ -269,28 +248,16 @@ def main():
         y_test
     )
 
-    # Step 8: RBF SVM (Part e)
+    # Step 8: RBF SVM
     rbf_train_acc, rbf_test_acc, rbf_train_f1, rbf_test_f1 = train_rbf_svm(
-=======
-    print("\nTrain F1 score :", lin_f1_train)
-    print("Test F1 score:", lin_f1_test)
-
-    # Step 6: Train RBF SVM (Part c)
-    rbf_train_acc, rbf_test_acc, rbf_f1_train, rbf_f1_test = train_rbf_svm(
->>>>>>> 0e239208bbef8f863223c7a69b5edc32a6ab21e1
         X_train_scaled, X_test_scaled, y_train, y_test
     )
 
     print("\n--- RBF Kernel SVM ---")
     print("Train Accuracy:", rbf_train_acc)
     print("Test Accuracy:", rbf_test_acc)
-<<<<<<< HEAD
     print("Train F1 score:", rbf_train_f1)
     print("Test F1 score:", rbf_test_f1)
-=======
-    print("\nTrain F1 score:", rbf_f1_train)
-    print("Test F1 score:", rbf_f1_test)
->>>>>>> 0e239208bbef8f863223c7a69b5edc32a6ab21e1
 
     # Final comparison
     print("\n--- Final Conclusion ---")
@@ -299,6 +266,5 @@ def main():
     else:
         print("Linear SVM with tuned C performs better.")
 
-
-# Run
-main()
+if __name__ == "__main__":
+    main()
