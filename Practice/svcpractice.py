@@ -53,13 +53,13 @@ def scale_data(x_train, x_test):
 
     return x_train_scaled, x_test_scaled
 
-def trainLinearSVM(x_train, x_test, y_train, y_test):
+def trainLinearSVM(x_train_scaled, x_test, y_train, y_test):
 
     model = SVC(kernel='linear', C= 0.01)
 
-    model.fit(x_train, y_train)
+    model.fit(x_train_scaled, y_train)
 
-    y_train_pred = model.predict(x_train)
+    y_train_pred = model.predict(x_train_scaled)
     y_test_pred = model.predict(x_test)
 
     trainAccuracy = accuracy_score(y_train, y_train_pred)
@@ -67,13 +67,13 @@ def trainLinearSVM(x_train, x_test, y_train, y_test):
 
     return trainAccuracy, testAccuracy
 
-def trainRBFSVM(x_train, x_test, y_train, y_test):
+def trainRBFSVM(x_train_scaled, x_test_scaled, y_train, y_test):
 
     model = SVC(kernel='rbf')
 
-    model.fit(x_train, y_train)
+    model.fit(x_train_scaled, y_train)
 
-    y_train_pred = model.predict(x_train)
+    y_train_pred = model.predict(x_train_scaled)
     y_test_pred = model.predict(x_test)
 
     trainAccuracy = accuracy_score(y_train, y_train_pred)
