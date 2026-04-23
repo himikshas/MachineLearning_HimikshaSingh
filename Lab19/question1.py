@@ -17,30 +17,25 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import roc_curve, auc
 
 
-def load_data(file_path):
+def load_data():
     """
     Load dataset and preprocess it.
     Handles missing values.
     """
-    df = pd.read_csv(file_path)
 
-    # Drop unwanted column
-    if 'Unnamed: 0' in df.columns:
-        df.drop(columns=['Unnamed: 0'], inplace=True)
+    df = pd.read_csv("Heart.csv")
 
-    # Convert categorical to numeric
+    # Drop index column if present
+    df = df.drop(columns=['Unnamed: 0'], errors='ignore')
+
+    # Convert categorical → numeric
     df = pd.get_dummies(df, drop_first=True)
 
-    # Convert target
-    if 'AHD' in df.columns:
-        df['AHD'] = df['AHD'].map({'Yes': 1, 'No': 0})
-        y = df['AHD']
-        X = df.drop(columns=['AHD'])
-    else:
-        y = df.iloc[:, -1]
-        X = df.iloc[:, :-1]
+    # Target (last column assumed)
+    X = df.iloc[:, :-1]
+    y = df.iloc[:, -1]
 
-    # 🔥 HANDLE MISSING VALUES
+    # remove NaN
     X = X.fillna(X.mean())
 
     return X, y
@@ -57,8 +52,9 @@ def split_data(X, y):
     Returns:
     X_train, X_test, y_train, y_test
     """
-    return train_test_split(X, y, test_size=0.2, random_state=42)
+    x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
+    return x_train, x_test, y_train, y_test
 
 def scale_data(X_train, X_test):
     """
@@ -72,13 +68,13 @@ def scale_data(X_train, X_test):
     Scaled X_train and X_test
     """
     scaler = StandardScaler()
-    X_train = scaler.fit_transform(X_train)
-    X_test = scaler.transform(X_test)
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)
 
-    return X_train, X_test
+    return X_train_scaled, X_test_scaled
 
 
-def train_model(X_train, y_train):
+def train_model(X_train_scaled, y_train):
     """
     Train logistic regression model.
 
@@ -90,19 +86,19 @@ def train_model(X_train, y_train):
     Trained model
     """
     model = LogisticRegression(max_iter=1000)
-    model.fit(X_train, y_train)
+    model.fit(X_train_scaled, y_train)
 
     return model
 
 
-def get_probabilities(model, X_test):
+def get_probabilities(model, X_test_scaled):
     """
     Predict probabilities for test data.
 
     Returns:
     Probability of class = 1
     """
-    return model.predict_proba(X_test)[:, 1]
+    return model.predict_proba(X_test_scaled)[:, 1]
 
 
 def compute_metrics(y_true, y_pred):
@@ -152,7 +148,7 @@ def evaluate_thresholds(y_true, y_prob, thresholds):
     - Compute confusion matrix
     - Print all metrics
     """
-    for t in thresholds:
+    for t in thresholds:              #loop over thresholds
         print(f"\n===== Threshold: {t} =====")
 
         y_pred = (y_prob >= t).astype(int)
@@ -210,15 +206,15 @@ def main():
     - Evaluate thresholds
     - Plot ROC curve
     """
-    X, y = load_data("Heart.csv")
+    X, y = load_data()
 
     X_train, X_test, y_train, y_test = split_data(X, y)
 
-    X_train, X_test = scale_data(X_train, X_test)
+    X_train_scaled, X_test_scaled = scale_data(X_train, X_test)
 
-    model = train_model(X_train, y_train)
+    model = train_model(X_train_scaled, y_train)
 
-    y_prob = get_probabilities(model, X_test)
+    y_prob = get_probabilities(model, X_test_scaled)
 
     thresholds = [0.3, 0.5, 0.7]
     evaluate_thresholds(y_test.values, y_prob, thresholds)
