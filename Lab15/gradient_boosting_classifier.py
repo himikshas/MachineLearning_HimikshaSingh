@@ -31,6 +31,8 @@ def load_dataset():
     X = df.drop("Direction", axis=1)
     y = df["Direction"]
 
+
+
     return X, y
 
 

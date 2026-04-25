@@ -69,7 +69,7 @@ def trainModel(X_scaled, k=4):
         model    : trained K-Means model
         clusters : cluster labels for each sample
     """
-    model = KMeans(n_clusters=k, random_state=0)
+    model = KMeans(n_clusters=k, random_state=42)          #so randomness stay same
 
     # fit model and assign cluster labels
     clusters = model.fit_predict(X_scaled)

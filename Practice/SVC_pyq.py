@@ -44,8 +44,6 @@ def perform_eda(df):
     # Missing values
     print("\nMissing values:\n", df.isnull().sum())
 
-    print("\nShape:", df.shape)
-    print("\nMissing values:\n", df.isnull().sum())
     print("\nTarget distribution:\n", df['Purchase'].value_counts())
 
     # Countplot
@@ -111,33 +109,23 @@ def scale_data(X_train, X_test):
 # ---------------------------------------------------
 # (b) Linear SVM (C = 0.01)
 # ---------------------------------------------------
-def train_linear_svm(X_train_scaled, X_test_scaled, y_train, y_test):
+def train_linear_svm(X_train_scaled, y_train):
 
-    model = SVC(kernel='linear', C=0.01)
+    model = SVC(kernel='linear')
 
     model.fit(X_train_scaled, y_train)
 
-    y_train_pred = model.predict(X_train_scaled)
-    y_test_pred = model.predict(X_test_scaled)
-
-    train_acc = accuracy_score(y_train, y_train_pred)
-    test_acc = accuracy_score(y_test, y_test_pred)
-
-    train_f1 = f1_score(y_train, y_train_pred)
-    test_f1 = f1_score(y_test, y_test_pred)
-
-    return train_acc, test_acc, train_f1, test_f1
+    return model
 
 
 
 # ---------------------------------------------------
 # (c) Grid Search for best C
 # ---------------------------------------------------
-def grid_search_svm(X_train_scaled, y_train):
+def grid_search_svm(model, X_train_scaled, y_train):
 
     param_grid = {'C': [0.01, 1, 10]}     #hyperparameters want to try
 
-    model = SVC(kernel='linear')
 
     grid = GridSearchCV(
         model,
@@ -174,6 +162,11 @@ def evaluate_model(model, X_train_scaled, X_test_scaled, y_train, y_test):
     train_error = 1 - train_acc
     test_error = 1 - test_acc
 
+    #f1 score
+    train_f1 = f1_score(y_train, y_train_pred)
+    test_f1 = f1_score(y_test, y_test_pred)
+
+
     #print values
     print("\n--- Best Model Performance ---")
     print("Train Accuracy:", train_acc)
@@ -182,7 +175,7 @@ def evaluate_model(model, X_train_scaled, X_test_scaled, y_train, y_test):
     print("Test Error:", test_error)
 
     #return values
-    return train_acc, test_acc
+    return train_acc, test_acc, train_f1, test_f1
 
 
 # ---------------------------------------------------
@@ -214,6 +207,7 @@ def main():
 
     # Step 1: Load data + EDA
     df = loadData()
+
     perform_eda(df)
 
     # Step 2: Preprocess
@@ -226,8 +220,20 @@ def main():
     X_train_scaled, X_test_scaled = scale_data(X_train, X_test)
 
     # Step 5: Linear SVM
-    lin_train_acc, lin_test_acc, lin_train_f1, lin_test_f1 = train_linear_svm(
-        X_train_scaled, X_test_scaled, y_train, y_test
+    model  = train_linear_svm(
+        X_train_scaled, y_train
+    )
+
+    # Step 6: Grid Search
+    best_model = grid_search_svm(model, X_train_scaled, y_train)
+
+    # Step 7: Evaluate best model
+    lin_train_acc, lin_test_acc, lin_train_f1, lin_test_f1= evaluate_model(
+        best_model,
+        X_train_scaled,
+        X_test_scaled,
+        y_train,
+        y_test
     )
 
     print("\n--- Linear SVM (C = 0.01) ---")
@@ -236,17 +242,6 @@ def main():
     print("Train F1 score:", lin_train_f1)
     print("Test F1 score:", lin_test_f1)
 
-    # Step 6: Grid Search
-    best_model = grid_search_svm(X_train_scaled, y_train)
-
-    # Step 7: Evaluate best model
-    best_train_acc, best_test_acc = evaluate_model(
-        best_model,
-        X_train_scaled,
-        X_test_scaled,
-        y_train,
-        y_test
-    )
 
     # Step 8: RBF SVM
     rbf_train_acc, rbf_test_acc, rbf_train_f1, rbf_test_f1 = train_rbf_svm(
@@ -261,7 +256,7 @@ def main():
 
     # Final comparison
     print("\n--- Final Conclusion ---")
-    if rbf_test_acc > best_test_acc:
+    if rbf_test_acc > lin_test_acc:
         print("RBF kernel performs better.")
     else:
         print("Linear SVM with tuned C performs better.")

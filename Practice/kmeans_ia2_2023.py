@@ -131,4 +131,5 @@ def main():
     print("\nFinal Labels:", labels)
 
 # Run program
-main()
+if __name__ == "__main__":
+    main()

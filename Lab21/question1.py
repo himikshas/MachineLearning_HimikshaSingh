@@ -123,7 +123,7 @@ def kmeans(X, k, max_iters=100, tol=1e-4):
     return centroids, labels
 
 
-if __name__ == "__main__":
+if "__main__" == __name__:
     """
     Example usage of K-Means
     """
