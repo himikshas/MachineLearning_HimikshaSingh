@@ -90,7 +90,7 @@ def main():
     evaluate_model(model, X_test_vec, y_test)
 
     # Test sample
-    msg = "Congratulations! You have won a prize"
+    msg = "WINNER! You won 1 lakh rupees lottery"
     print("\nSample Prediction:", predict_message(model, vectorizer, msg))
 
 
