@@ -112,7 +112,7 @@ def predict_joint_probability(model, X_test):
         for c in model:                                     #loop through each class in the model
 
             count = model[c].get(key, 1)                    #how many times does any particular feature combination appeared in class c
-                                                            #.get(key,0) means if the key exists then return the occurrence of the key in a unique class
+                                                            #.get(key,1) means if the key exists then return the occurrence of the key in a unique class
                                                             #if not present then return default_value which is 1 here (laplace smoothing) for unseen keys in inference stage
             if count > best_count:                          #count and best_count which is initially -1
 
